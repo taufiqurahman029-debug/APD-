@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Pelaporan Kerusakan APD</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Panel Admin - Laporan Kerusakan APD</h1>
+      <button id="logoutBtn" class="btn secondary" style="margin-left:auto;">Logout</button>
+    </header>
+
+    <div class="card">
+      <h3>Daftar Semua Laporan</h3>
+      <div id="reportsList" class="reports-list"></div>
+
+      <div class="export-import">
+        <button id="exportBtn" class="btn secondary">Ekspor JSON</button>
+        <button id="importBtn" class="btn">Impor JSON</button>
+        <button id="clearAllBtn" class="btn" style="background-color:#e53e3e;">Hapus Semua</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Cek login
+    const role = localStorage.getItem("role");
+    if (role !== "admin") {
+      alert("Akses ditolak! Hanya admin yang bisa membuka halaman ini.");
+      window.location.href = "login.html";
+    }
+
+    const reportsList = document.getElementById("reportsList");
+    const exportBtn = document.getElementById("exportBtn");
+    const importBtn = document.getElementById("importBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // Ambil data dari localStorage
+    let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+    // Fungsi render laporan
+    function renderReports() {
+      reportsList.innerHTML = "";
+
+      if (reports.length === 0) {
+        reportsList.innerHTML = "<p>Belum ada laporan tersimpan.</p>";
+        return;
+      }
+
+      reports.forEach((r, i) => {
+        const div = document.createElement("div");
+        div.className = "report-item";
+        div.innerHTML = `
+          <strong>${r.nama}</strong> (${r.bagian})<br>
+          <small>${r.tanggal}</small><br>
+          <em>${r.jenis}</em><br>
+          <p>${r.deskripsi}</p>
+          ${r.foto ? `<img src="${r.foto}" class="preview">` : ""}
+          <button class="delete-btn" data-index="${i}">Hapus</button>
+          <hr>
+        `;
+        reportsList.appendChild(div);
+      });
+    }
+
+    // Simpan kembali ke localStorage
+    function saveReports() {
+      localStorage.setItem("reports", JSON.stringify(reports));
+    }
+
+    // Hapus satu laporan
+    reportsList.addEventListener("click", (e) => {
+      if (e.target.classList.contains("delete-btn")) {
+        const index = e.target.getAttribute("data-index");
+        if (confirm("Hapus laporan ini?")) {
+          reports.splice(index, 1);
+          saveReports();
+          renderReports();
+        }
+      }
+    });
+
+    // Hapus semua laporan
+    clearAllBtn.addEventListener("click", () => {
+      if (confirm("Yakin ingin menghapus semua laporan?")) {
+        reports = [];
+        saveReports();
+        renderReports();
+      }
+    });
+
+    // Ekspor JSON
+    exportBtn.addEventListener("click", () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports, null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = "laporan_apd.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // Impor JSON
+    importBtn.addEventListener("click", () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".json";
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            if (Array.isArray(imported)) {
+              reports = imported;
+              saveReports();
+              renderReports();
+            } else {
+              alert("File tidak valid!");
+            }
+          } catch {
+            alert("Gagal membaca file JSON!");
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    });
+
+    // Jalankan pertama kali
+    renderReports();
+  </script>
+</body>
+</html>
+

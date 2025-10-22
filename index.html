@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pelaporan Kerusakan APD</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#2b6cb0" />
+        <path d="M7 12h10M7 8h10M7 16h6" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <div>
+        <h1>Pelaporan Kerusakan APD</h1>
+        <div class="subtitle">Laporkan kerusakan alat pelindung diri (APD) dengan cepat.</div>
+      </div>
+    </header>
+    <button id="logoutBtn" class="btn secondary" style="float:right;">Logout</button>
+
+
+    <div class="grid">
+      <div class="card">
+        <form id="reportForm">
+          <div class="form-group">
+            <label for="nama">Nama Pelapor</label>
+            <input id="nama" type="text" placeholder="Nama lengkap" required />
+          </div>
+
+          <div class="form-group">
+            <label for="Bagian">Bagian</label>
+            <select id="Bagian" required>
+              <option value="" disabled selected>Pilih Bagian</option>
+              <option value="Laboratorium">Laboratorium</option>
+              <option value="Preparasi">Preparasi</option>
+              <option value="Sampler">Sampler</option>
+              <option value="Surveyor">Surveyor</option>
+              <option value="Driver">Driver</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="form-group" style="flex:1;">
+              <label for="tanggal">Tanggal</label>
+              <input id="tanggal" type="date" required />
+            </div>
+            <div class="form-group" style="width:160px;">
+              <label for="jenis">Jenis APD</label>
+              <select id="jenis">
+                <option value="Masker">Masker</option>
+                <option value="Sarung Tangan">Sarung Tangan</option>
+                <option value="Kacamata Pelindung">Kacamata Pelindung</option>
+                <option value="Helm">Helm</option>
+                <option value="Rompi">Rompi</option>
+                <option value="Sepatu">Sepatu</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="deskripsi">Deskripsi Kerusakan</label>
+            <textarea id="deskripsi" placeholder="Jelaskan kerusakan secara singkat" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="foto">Foto (opsional)</label>
+            <input id="foto" type="file" accept="image/*" />
+            <div id="previewArea"></div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn" type="submit">Kirim Laporan</button>
+            <button id="clearBtn" type="button" class="btn secondary">Bersihkan Form</button>
+            <div class="counter"><span id="count">0</span> laporan tersimpan</div>
+          </div>
+        </form>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3>Daftar Laporan</h3>
+          <div class="reports-list" id="reportsList"></div>
+          <div class="export-import">
+            <button id="exportBtn" class="btn secondary" type="button">Ekspor JSON</button>
+            <button id="importBtn" class="btn" type="button">Impor JSON</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Panduan Singkat</h4>
+          <ol>
+            <li>Isi form lengkap dengan foto bila perlu.</li>
+            <li>Gunakan tombol "Ekspor" untuk backup laporan.</li>
+            <li>Data disimpan lokal di browser (localStorage).</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

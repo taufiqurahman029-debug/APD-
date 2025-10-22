@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Pelaporan APD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container card" style="max-width:400px; margin-top:100px;">
+    <h2>Login Sistem APD</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input id="username" type="text" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="password" type="password" required>
+      </div>
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      // akun contoh
+      if (user === "admin" && pass === "admin123") {
+        localStorage.setItem("role", "admin");
+        window.location.href = "index.html";
+      } else if (user === "user" && pass === "user123") {
+        localStorage.setItem("role", "user");
+        window.location.href = "index.html";
+      } else {
+        alert("Username atau password salah!");
+      }
+    });
+  </script>
+</body>
+</html>
